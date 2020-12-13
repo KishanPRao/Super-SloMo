@@ -1,3 +1,12 @@
+# Modification
+
+Used intermediate frames to double fps of existing videos.
+Also fixed a minor indexing bug during frame generation when batch_size > 1.
+
+```bash
+python video_to_slomo.py --video <input> --output <output> --fps <double-fps> --sf 2 --checkpoint <model.ckpt>
+```
+
 # Super-SloMo [![MIT Licence](https://badges.frapsoft.com/os/mit/mit.svg?v=103)](https://opensource.org/licenses/mit-license.php)
 PyTorch implementation of "Super SloMo: High Quality Estimation of Multiple Intermediate Frames for Video Interpolation" by Jiang H., Sun D., Jampani V., Yang M., Learned-Miller E. and Kautz J. [[Project]](https://people.cs.umass.edu/~hzjiang/projects/superslomo/) [[Paper]](https://arxiv.org/abs/1712.00080)
 

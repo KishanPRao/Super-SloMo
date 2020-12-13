@@ -11,6 +11,8 @@ import model
 import dataloader
 import platform
 from tqdm import tqdm
+import time
+import datetime
 
 # For parsing commandline arguments
 parser = argparse.ArgumentParser()
@@ -183,7 +185,9 @@ def main():
 
             # Save reference frames in output folder
             for batchIndex in range(args.batch_size):
-                (TP(frame0[batchIndex].detach())).resize(videoFrames.origDim, Image.BILINEAR).save(os.path.join(outputPath, str(frameCounter + args.sf * batchIndex) + ".png"))
+                frame0Size = frame0.size()[0]
+                if frame0Size > batchIndex:
+                    (TP(frame0[batchIndex].detach())).resize(videoFrames.origDim, Image.BILINEAR).save(os.path.join(outputPath, str(frameCounter + args.sf * batchIndex) + ".png"))
             frameCounter += 1
 
             # Generate intermediate frames
@@ -214,7 +218,9 @@ def main():
 
                 # Save intermediate frame
                 for batchIndex in range(args.batch_size):
-                    (TP(Ft_p[batchIndex].cpu().detach())).resize(videoFrames.origDim, Image.BILINEAR).save(os.path.join(outputPath, str(frameCounter + args.sf * batchIndex) + ".png"))
+                    frameSize = Ft_p.size()[0]
+                    if frameSize > batchIndex:
+                        (TP(Ft_p[batchIndex].cpu().detach())).resize(videoFrames.origDim, Image.BILINEAR).save(os.path.join(outputPath, str(frameCounter + args.sf * batchIndex) + ".png"))
                 frameCounter += 1
 
             # Set counter accounting for batching of frames
@@ -226,6 +232,10 @@ def main():
     # Remove temporary files
     rmtree(extractionDir)
 
-    exit(0)
+start = time.process_time()
 
 main()
+
+timeTakenInSeconds = time.process_time() - start
+timeTaken = str(datetime.timedelta(seconds=timeTakenInSeconds))
+print("Time taken: <", timeTaken, ">", "(", timeTakenInSeconds, "s)")
